@@ -1,0 +1,23 @@
+var fire service = {
+  'type': 'FeatureCollection',
+  'features': [
+    { 'type': 'Feature', 'properties': { 'Name': 'Ghana National Fire Service (Headquarters)', 'Phone': '+233 30 277 2446' }, 'geometry': { 'type': 'Point', 'coordinates': [-0.185090, 5.569623] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Ghana National Fire Service (Korle Bu)', 'Phone': '+233 30 266 65766' }, 'geometry': { 'type': 'Point', 'coordinates': [-0.232762, 5.535084] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Ghana National Fire Service' , 'Phone': '+233 50 913 2226' }, 'geometry': { 'type: 'Point', 'coordinates': [-0.343552,  5.556223] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Ghana National Fire Service (Madina)' , 'Phone': '+233 30 250 1744' }, 'geometry': { 'type': 'Point', 'coordinates': [ -0.172312,  5.681820] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Ghana National Fire Service (Dodowa)' , 'Phone': '233 24 701 6143' }, 'geometry': { 'type': 'Point', 'coordinates': [-0.0938677, 	5.8843285] } }
+    
+  ]
+};
+var markets = {
+  'type': 'FeatureCollection',
+  'features': [
+    { 'type': 'Feature', 'properties': { 'Name': 'Alajo Market Accra', 'Phone': '+233 20 378 2358' }, 'geometry': { 'type': 'Point', 'coordinates': [ -0.216250, 5.5915493] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Kaneshie Market Complex', 'Phone': '+233 24 324 6237' }, 'geometry': { 'type': 'Point', 'coordinates': [ -0.2361452,  5.56439] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Chantan Marke' , 'Phone': '+233 55 502 7537' }, 'geometry': { 'type': 'Point', 'coordinates': [ -0.255433,   5.623647] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Nima Market' , 'Phone': '+233 26 824 3733' }, geometry: { 'type': 'Point', 'coordinates': [  -0.197755,   5.576933] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Alajo Market Accra' , 'Phone': '+233 20 378 2358' }, 'geometry': { 'type': 'Point', 'coordinates': [ -0.217831, 5.592227] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Dodowa Market ' , 'Phone': '+233 24 440 8070' }, 'geometry': { 'type': 'Point', 'coordinates': [  -0.213414,   5.637610] } },
+    { 'type': 'Feature', 'properties': { 'Name': 'Makola Market' , 'Phone': '+233 24 964 4077' }, 'geometry': { 'type': 'Point', 'coordinates': [  -0.206320, 5.546607] } }
+  ]
+};

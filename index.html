@@ -1,0 +1,179 @@
+<html>
+
+<head>
+  <title>Studio Week 4</title>
+  <!-- Adding in the Leaflet CSS file -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
+  <!-- Adding Leaflet JavaScript file -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+
+  <!-- Adding JavaScript library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
+
+  <style>
+    #narrative {
+      width: 100%;
+      height: 20%;
+    }
+
+    h1 {
+      font-family: Helvetica, Arial, Verdana;
+      font-size: 50px
+    }
+
+    p {
+      font-family: Helvetica, Arial, Verdana;
+      font-size: 18px
+    }
+
+    p2 {
+      font-family: Helvetica, Arial, Verdana;
+      font-size: 14px
+    }
+
+    #map {
+      width: 900px;
+      height: 500px;
+    }
+
+    .legend {
+      line-height: 18px;
+      color: #333333;
+      font-family: 'Open Sans', Helvetica, sans-serif;
+      padding: 6px 8px;
+      background: white;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
+
+    .legend i {
+      width: 28px;
+      height: 18px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.7;
+    }
+
+    .legend img {
+      width: 18px;
+      height: 18px;
+      float: left;
+    }
+
+    .legend p {
+      font-size: 12px;
+      line-height: 18px;
+      margin: 0;
+    }
+  </style>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <h1>Studio Week 4: Mapping Rats & Different Datasets <br> Spatial distribution of rats in Boston </h1>
+  <!-- Add multiple pages to web page-->
+  <!-- active class displays the grey box around current page-->
+  <ul>
+    <li><a class="active" href="index.html" target="_self">Rats in Boston</a></li>
+    <li><a href="Google-shts.html" target="_self">Google Sheet Maps</a></li>
+    <li><a href="Fire-station" target="_self">Fire Service</a></li>
+  </ul>
+  <br>
+
+  <div id="map"></div>
+
+  <script>
+    // initialize the map
+    var map = L.map('map').setView([42.35, -71.08], 13);
+
+    // load a tile layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a> | Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+
+      maxZoom: 17,
+      minZoom: 9
+    }).addTo(map);
+    // load GeoJSON from an external file
+    $.getJSON("data/neighborhoods.geojson", function(hoodData) {
+      L.geoJson(hoodData, {
+        style: function(feature) {
+          var fillColor,
+            density = feature.properties.density;
+          if (density > 80) fillColor = "#993404";
+          else if (density > 40) fillColor = "#d95f0e";
+          else if (density > 20) fillColor = "#fe9929";
+          else if (density > 10) fillColor = "#fed98e";
+          else if (density > 0) fillColor = "#ffffd4";
+          else fillColor = "#f7f7f7"; // no data
+          return {
+            color: "#999",
+            weight: 1,
+            fillColor: fillColor,
+            fillOpacity: .8
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          layer.bindPopup("<strong>" + feature.properties.Name + "</strong><br/>" + feature.properties.density + " rats per square mile")
+        }
+      }).addTo(map);
+    });
+
+    $.getJSON("data/rodents.geojson", function(data) {
+      var ratIcon = L.icon({
+        iconUrl: 'http://andywoodruff.com/maptime-leaflet/rat.png',
+        iconSize: [60, 50]
+      });
+      var rodents = L.geoJson(data, {
+        pointToLayer: function(feature, latlng) {
+          var marker = L.marker(latlng, {
+            icon: ratIcon
+          });
+          marker.bindPopup(feature.properties.Location + '<br/>' + feature.properties.OPEN_DT);
+          return marker;
+        }
+      });
+      var clusters = L.markerClusterGroup();
+      clusters.addLayer(rodents);
+      map.addLayer(clusters);
+    });
+
+    // Create Leaflet Control Object for Legend
+    var legend = L.control({
+      position: 'topright'
+    });
+
+    // Function that runs when legend is added to map
+    legend.onAdd = function(map) {
+
+      // Create Div Element and Populate it with HTML
+      var div = L.DomUtil.create('div', 'legend');
+      div.innerHTML += '<b>Rat Density per sq. mi.</b><br/>';
+      div.innerHTML += '<b>by Neighborhood</b><br/>';
+      div.innerHTML += '<i style="background: #993404"></i><p>> 80</p>';
+      div.innerHTML += '<i style="background: #d95f0e"></i><p>> 40</p>';
+      div.innerHTML += '<i style="background: #fe9929"></i><p>> 20</p>';
+      div.innerHTML += '<i style="background: #fed98e"></i><p>> 10</p>';
+      div.innerHTML += '<i style="background: #ffffd4"></i><p>> 0</p>';
+      div.innerHTML += '<i style="background: #f7f7f7"></i><p>No Data</p>';
+      div.innerHTML += '<hr><img src="images/rat.png"><p>Rat sighting.</p>';
+      div.innerHTML += '<img src="images/clusters.png"><p>Grouped rat sightings.</p>';
+      // Return the Legend div containing the HTML content
+      return div;
+    };
+
+    // Add Legend to Map
+    legend.addTo(map);
+
+    // Add Scale Bar to Map
+    L.control.scale({
+      position: 'bottomleft'
+    }).addTo(map);
+  </script>
+</body>
+
+</html>
