@@ -2,7 +2,10 @@
 <html>
 
 <head>
+  <meta charset="utf-8">
   <title>Studio Week 4</title>
+
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <!-- Add Mapbox GL JS JavaScript file -->
   <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
   <!-- Add in the Mapbox GL JS CSS file -->
@@ -312,6 +315,8 @@
         );
       }
     });
+    // Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
   </script>
   <h3>I created this map to illustrate the potential use of web mapping to address fire outbreaks in markets. Specifically, this web map can serve as access to fire station centers during fire outbreaks.
     In this regard, the web map shows the closest fire station to each market within a specific vicinity. It thus offers a user the opportunity to contact the closest fire station in the event of a market fire outbreak.</h3>
