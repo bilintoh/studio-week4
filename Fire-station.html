@@ -68,7 +68,7 @@
     });
 
     //Load data concerning hospitals ad librarires in Lexington, Ky
-    var hospitals = {
+    var firestation = {
       'type': 'FeatureCollection',
       'features': [{
           'type': 'Feature',
@@ -127,7 +127,7 @@
         }
       ]
     };
-    var libraries = {
+    var markets = {
       'type': 'FeatureCollection',
       'features': [{
           'type': 'Feature',
@@ -223,11 +223,11 @@
     //when you hover your mouse over a hospital or library.
     map.on('load', function() {
       map.addLayer({
-        id: 'hospitals',
+        id: 'firestation',
         type: 'symbol',
         source: {
           type: 'geojson',
-          data: hospitals
+          data: firestation
         },
         layout: {
           'icon-image': 'fire-station-15',
@@ -237,11 +237,11 @@
       });
 
       map.addLayer({
-        id: 'libraries',
+        id: 'markets',
         type: 'symbol',
         source: {
           type: 'geojson',
-          data: libraries
+          data: markets
         },
         layout: {
           'icon-image': 'shop-15',
@@ -251,7 +251,7 @@
       });
 
       // Add new source with the id "near-hospital" when the map is loaded
-      map.addSource('nearest-hospital', {
+      map.addSource('nearest-firestation', {
         type: 'geojson',
         data: {
           'type': 'FeatureCollection',
@@ -265,7 +265,7 @@
 
     map.on('mousemove', function(e) {
       var features = map.queryRenderedFeatures(e.point, {
-        layers: ['hospitals', 'libraries']
+        layers: ['firestation', 'markets']
       });
       if (!features.length) {
         popup.remove();
@@ -285,33 +285,33 @@
     //make an “event handler” for when someone clicks on a library marker.
     //When an event occurs, like a click on a marker, the event handler tells the map what to do in response.
     map.on('click', function(e) {
-      var libraryFeatures = map.queryRenderedFeatures(e.point, {
-        layers: ['libraries']
+      var marketsFeatures = map.queryRenderedFeatures(e.point, {
+        layers: ['markets']
       });
-      if (!libraryFeatures.length) {
+      if (!marketsFeatures.length) {
         return;
       }
 
-      var libraryFeature = libraryFeatures[0];
+      var marketsFeatures = marketsFeatures[0];
 
-      var nearestHospital = turf.nearest(libraryFeature, hospitals);
+      var nearestfirestation = turf.nearest(marketsFeatures, firestation);
 
-      if (nearestHospital != null) {
-        map.getSource('nearest-hospital').setData({
+      if (nearestfirestation != null) {
+        map.getSource('nearest-firestation').setData({
           'type': 'FeatureCollection',
-          'features': [nearestHospital]
+          'features': [nearestfirestation]
         });
 
         map.addLayer({
-            id: 'nearest-hospital',
+            id: 'nearest-firestation',
             type: 'circle',
-            source: 'nearest-hospital',
+            source: 'nearest-firestation',
             paint: {
               'circle-radius': 12,
               'circle-color': '#486DE0'
             }
           },
-          'hospitals'
+          'firestation'
         );
       }
     });
