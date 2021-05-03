@@ -37,8 +37,6 @@
       width: 900px;
       height: 500px;
     }
-
-
   </style>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -49,278 +47,280 @@
   <!-- active class displays the grey box around current page-->
   <ul>
     <li><a href="index.html" target="_self">Rats in Boston</a></li>
+    <li><a href="Rats-heatmap.html" target="_self">Rats in Boston v2</a></li>
     <li><a href="Google-shts.html" target="_self">Google Sheet Maps</a></li>
-    <li><a  class="active" href="Fire-station.html" target="_self">Fire Station</a></li>
+    <li><a class="active" href="Fire-station.html" target="_self">Fire Station</a></li>
+    
   </ul>
   <br>
-
-  <!-- Add a div to give the map somewhere to go -->
-  <div id='map'></div>
-
-  <script>
-    //creating the the map instance
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYmlsaW50b2giLCJhIjoiY2tscjduYWk4MWp4ejJxcG0yYWdveWdreCJ9.NzJS_8TqI-w5-FejDuNO5w';
-    var map = new mapboxgl.Map({
-      container: 'map', // container id
-      style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
-      center: [-0.161643, 5.674809], // starting position [lng, lat]
-      zoom: 9.5 // starting zoom
-    });
-
-    //Load data concerning hospitals ad librarires in Lexington, Ky
-    var firestation = {
-      'type': 'FeatureCollection',
-      'features': [{
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Ghana National Fire Service (Headquarters)',
-            'Phone': '+233 30 277 2446'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.185090, 5.569623]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Ghana National Fire Service (Korle Bu)',
-            'Phone': '+233 30 266 65766'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.232762, 5.535084]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Ghana National Fire Service',
-            'Phone': '+233 50 913 2226'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.343552, 5.556223]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Ghana National Fire Service (Madina)',
-            'Phone': '+233 30 250 1744'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.172312, 5.681820]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Ghana National Fire Service (Dodowa)',
-            'Phone': '233 24 701 6143'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.0938677, 5.8843285]
-          }
-        }
-      ]
-    };
-    var markets = {
-      'type': 'FeatureCollection',
-      'features': [{
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Alajo Market Accra',
-            'Phone': '+233 20 378 2358'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.216250, 5.5915493]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Kaneshie Market Complex',
-            'Phone': '+233 24 324 6237'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.2361452, 5.56439]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Chantan Market',
-            'Phone': '+233 55 502 7537'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-84.496894, 38.045459]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Beaumont Branch',
-            'Address': '3080 Fieldstone Way'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.255433, 5.623647]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Nima Market',
-            'Phone': '+233 26 824 3733'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.197755, 5.576933]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Dodowa Market',
-            'Phone': '+233 24 440 8070'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.213414, 5.637610]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Makola Market',
-            'Phone': '+233 24 964 4077'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.206320, 5.546607]
-          }
-        },
-        {
-          'type': 'Feature',
-          'properties': {
-            'Name': 'Alajo Market Accra',
-            'Phone': '+233 20 378 2358'
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [-0.217831, 5.592227]
-          }
-        }
-      ]
-    };
-    // Addin interactivity: Makes the names of the hospitals and libraies Popup
-    //when you hover your mouse over a hospital or library.
-    map.on('load', function() {
-      map.addLayer({
-        id: 'firestation',
-        type: 'symbol',
-        source: {
-          type: 'geojson',
-          data: firestation
-        },
-        layout: {
-          'icon-image': 'fire-station-15',
-          'icon-allow-overlap': true
-        },
-        paint: {}
-      });
-
-      map.addLayer({
-        id: 'markets',
-        type: 'symbol',
-        source: {
-          type: 'geojson',
-          data: markets
-        },
-        layout: {
-          'icon-image': 'shop-15',
-          'icon-allow-overlap': true
-        },
-        paint: {}
-      });
-
-      // Add new source with the id "near-hospital" when the map is loaded
-      map.addSource('nearest-firestation', {
-        type: 'geojson',
-        data: {
-          'type': 'FeatureCollection',
-          'features': []
-        }
-      });
-    });
-
-
-    var popup = new mapboxgl.Popup();
-
-    map.on('mousemove', function(e) {
-      var features = map.queryRenderedFeatures(e.point, {
-        layers: ['firestation', 'markets']
-      });
-      if (!features.length) {
-        popup.remove();
-        return;
-      }
-
-      var feature = features[0];
-
-      popup
-        .setLngLat(feature.geometry.coordinates)
-        .setHTML(feature.properties.Name)
-        .addTo(map);
-
-      map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-    });
-
-    //make an “event handler” for when someone clicks on a library marker.
-    //When an event occurs, like a click on a marker, the event handler tells the map what to do in response.
-    map.on('click', function(e) {
-      var marketsFeatures = map.queryRenderedFeatures(e.point, {
-        layers: ['markets']
-      });
-      if (!marketsFeatures.length) {
-        return;
-      }
-
-      var marketsFeatures = marketsFeatures[0];
-
-      var nearestfirestation = turf.nearest(marketsFeatures, firestation);
-
-      if (nearestfirestation != null) {
-        map.getSource('nearest-firestation').setData({
-          'type': 'FeatureCollection',
-          'features': [nearestfirestation]
-        });
-
-        map.addLayer({
-            id: 'nearest-firestation',
-            type: 'circle',
-            source: 'nearest-firestation',
-            paint: {
-              'circle-radius': 12,
-              'circle-color': '#486DE0'
-            }
-          },
-          'firestation'
-        );
-      }
-    });
-    // Add zoom and rotation controls to the map.
-map.addControl(new mapboxgl.NavigationControl());
-  </script>
   <h3>I created this map to illustrate the potential use of web mapping to address fire outbreaks in markets. Specifically, this web map can serve as access to fire station centers during fire outbreaks.
     In this regard, the web map shows the closest fire station to each market within a specific vicinity. It thus offers a user the opportunity to contact the closest fire station in the event of a market fire outbreak.</h3>
-    <a href="https://www.modernghana.com/news/1050937/fire-guts-kaneshie-market.html">Click this text to read a news article concerning fire outbreak in one of Accra's popular markets (Kaneshi).</a>
+  <a href="https://www.modernghana.com/news/1050937/fire-guts-kaneshie-market.html">Click this text to read a news article concerning fire outbreak in one of Accra's popular markets (Kaneshi).</a>
+</body>
+<!-- Add a div to give the map somewhere to go -->
+<div id='map'></div>
+
+<script>
+  //creating the the map instance
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYmlsaW50b2giLCJhIjoiY2tscjduYWk4MWp4ejJxcG0yYWdveWdreCJ9.NzJS_8TqI-w5-FejDuNO5w';
+  var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
+    center: [-0.161643, 5.674809], // starting position [lng, lat]
+    zoom: 9.5 // starting zoom
+  });
+
+  //Load data concerning hospitals ad librarires in Lexington, Ky
+  var firestation = {
+    'type': 'FeatureCollection',
+    'features': [{
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Ghana National Fire Service (Headquarters)',
+          'Phone': '+233 30 277 2446'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.185090, 5.569623]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Ghana National Fire Service (Korle Bu)',
+          'Phone': '+233 30 266 65766'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.232762, 5.535084]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Ghana National Fire Service',
+          'Phone': '+233 50 913 2226'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.343552, 5.556223]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Ghana National Fire Service (Madina)',
+          'Phone': '+233 30 250 1744'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.172312, 5.681820]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Ghana National Fire Service (Dodowa)',
+          'Phone': '233 24 701 6143'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.0938677, 5.8843285]
+        }
+      }
+    ]
+  };
+  var markets = {
+    'type': 'FeatureCollection',
+    'features': [{
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Alajo Market Accra',
+          'Phone': '+233 20 378 2358'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.216250, 5.5915493]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Kaneshie Market Complex',
+          'Phone': '+233 24 324 6237'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.2361452, 5.56439]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Chantan Market',
+          'Phone': '+233 55 502 7537'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-84.496894, 38.045459]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Beaumont Branch',
+          'Address': '3080 Fieldstone Way'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.255433, 5.623647]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Nima Market',
+          'Phone': '+233 26 824 3733'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.197755, 5.576933]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Dodowa Market',
+          'Phone': '+233 24 440 8070'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.213414, 5.637610]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Makola Market',
+          'Phone': '+233 24 964 4077'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.206320, 5.546607]
+        }
+      },
+      {
+        'type': 'Feature',
+        'properties': {
+          'Name': 'Alajo Market Accra',
+          'Phone': '+233 20 378 2358'
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-0.217831, 5.592227]
+        }
+      }
+    ]
+  };
+  // Addin interactivity: Makes the names of the hospitals and libraies Popup
+  //when you hover your mouse over a hospital or library.
+  map.on('load', function() {
+    map.addLayer({
+      id: 'firestation',
+      type: 'symbol',
+      source: {
+        type: 'geojson',
+        data: firestation
+      },
+      layout: {
+        'icon-image': 'fire-station-15',
+        'icon-allow-overlap': true
+      },
+      paint: {}
+    });
+
+    map.addLayer({
+      id: 'markets',
+      type: 'symbol',
+      source: {
+        type: 'geojson',
+        data: markets
+      },
+      layout: {
+        'icon-image': 'shop-15',
+        'icon-allow-overlap': true
+      },
+      paint: {}
+    });
+
+    // Add new source with the id "near-hospital" when the map is loaded
+    map.addSource('nearest-firestation', {
+      type: 'geojson',
+      data: {
+        'type': 'FeatureCollection',
+        'features': []
+      }
+    });
+  });
+
+
+  var popup = new mapboxgl.Popup();
+
+  map.on('mousemove', function(e) {
+    var features = map.queryRenderedFeatures(e.point, {
+      layers: ['firestation', 'markets']
+    });
+    if (!features.length) {
+      popup.remove();
+      return;
+    }
+
+    var feature = features[0];
+
+    popup
+      .setLngLat(feature.geometry.coordinates)
+      .setHTML(feature.properties.Name)
+      .addTo(map);
+
+    map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+  });
+
+  //make an “event handler” for when someone clicks on a library marker.
+  //When an event occurs, like a click on a marker, the event handler tells the map what to do in response.
+  map.on('click', function(e) {
+    var marketsFeatures = map.queryRenderedFeatures(e.point, {
+      layers: ['markets']
+    });
+    if (!marketsFeatures.length) {
+      return;
+    }
+
+    var marketsFeatures = marketsFeatures[0];
+
+    var nearestfirestation = turf.nearest(marketsFeatures, firestation);
+
+    if (nearestfirestation != null) {
+      map.getSource('nearest-firestation').setData({
+        'type': 'FeatureCollection',
+        'features': [nearestfirestation]
+      });
+
+      map.addLayer({
+          id: 'nearest-firestation',
+          type: 'circle',
+          source: 'nearest-firestation',
+          paint: {
+            'circle-radius': 12,
+            'circle-color': '#486DE0'
+          }
+        },
+        'firestation'
+      );
+    }
+  });
+  // Add zoom and rotation controls to the map.
+  map.addControl(new mapboxgl.NavigationControl());
+</script>
 </body>
 
 </html>
